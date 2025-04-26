@@ -1,0 +1,2550 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+     <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --primary-light: #ebedfd;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --info: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius-sm: 0.2rem;
+            --radius: 0.25rem;
+            --radius-md: 0.3rem;
+            --radius-lg: 0.5rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 2rem;
+            --radius-full: 9999px;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f8fafc;
+            color: var(--dark);
+            line-height: 1.6;
+            padding-top: 56px;
+            padding-bottom: 60px;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.9);
+            border: solid;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand i {
+            font-size: 1.2em;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-link i {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.);
+            border: solid;
+        }
+
+        /* Product Card */
+        .product-card {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.9);
+        }
+
+        .product-image-container {
+            position: relative;
+            padding-top: 100%;
+            overflow: hidden;
+            background-color: var(--white);
+        }
+
+        .product-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-body {
+            padding: 1.25rem;
+            flex-grow: 2;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-badges {
+            margin-bottom: 0.75rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .product-badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-xl);
+            font-weight: 500;
+        }
+
+        .product-price {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: auto;
+            padding-top: 0.5rem;
+        }
+
+        .product-description {
+            font-size: 0.85rem;
+            color: var(--blue);
+            margin-top: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Location Badge */
+        .product-location {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Category Card */
+        .category-card {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            text-align: center;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            background-color: var(--primary);
+            color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .category-card:hover i {
+            color: var(--white);
+        }
+
+        .category-card i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            transition: color 0.3s ease;
+        }
+
+        /* Condition Badges */
+        .badge-condition[data-condition="Novo"] {
+            background-color: #4caf50 !important;
+            color: white;
+        }
+
+        .badge-condition[data-condition="Usado"] {
+            background-color: #ff9800 !important;
+            color: white;
+        }
+
+        .badge-condition[data-condition="Semi-novo"] {
+            background-color: #2196f3 !important;
+            color: white;
+        }
+
+        .badge-condition[data-condition="Danificado"] {
+            background-color: #f44336 !important;
+            color: white;
+        }
+
+        /* Location Dropdown */
+        #locationDropdown .dropdown-toggle {
+            min-width: 200px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        #locationDropdown .dropdown-toggle::after {
+            margin-left: 0.5em;
+        }
+
+        #currentLocationText {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex-grow: 1;
+        }
+
+        /* Distance Filter */
+        #distanceFilter .dropdown-toggle {
+            min-width: 120px;
+        }
+
+        /* Location Search */
+        #locationSearch {
+            transition: all 0.3s ease;
+        }
+
+        #locationSearch:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        /* Auth Container */
+        .auth-container {
+            max-width: 400px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .navbar-collapse {
+                padding: 1rem;
+                margin-top: 0.5rem;
+                border-radius: var(--radius);
+            }
+            
+            .search-container .form-control {
+                min-width: auto;
+            }
+            
+            #productDetailView .col-lg-6 {
+                padding: 1rem !important;
+            }
+            
+            #locationDropdown .dropdown-toggle {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <i class="fas fa-store me-2"></i>
+                <span>Achei Online</span>
+            </a>
+            
+            <!-- Mobile Toggle Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" 
+                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" id="homeLink">
+                            <i class="fas fa-home me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="categoriesLink">
+                            <i class="fas fa-list me-1"></i> Categorias
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="newAdLink">
+                            <i class="fas fa-plus-circle me-1"></i> Novo Anúncio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="myAdsLink">
+                            <i class="fas fa-bullhorn me-1"></i> Meus Anúncios
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <!-- Location Dropdown -->
+                    <div class="dropdown me-3">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="locationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-map-marker-alt me-1"></i>
+                            <span id="currentLocationText">Selecione sua localidade</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end p-3" style="min-width: 300px;" aria-labelledby="locationDropdown">
+                            <div class="mb-3">
+                                <label for="stateSelect" class="form-label">Estado</label>
+                                <select class="form-select" id="stateSelect">
+                                    <option value="">Selecione um estado</option>
+                                    <!-- Estados serão carregados via JavaScript -->
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="citySelect" class="form-label">Cidade</label>
+                                <select class="form-select" id="citySelect" disabled>
+                                    <option value="">Selecione uma cidade</option>
+                                </select>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="useMyLocation">
+                                <label class="form-check-label" for="useMyLocation">
+                                    Usar minha localização atual
+                                </label>
+                            </div>
+                            <button class="btn btn-primary w-100" id="applyLocationBtn">Aplicar</button>
+                        </div>
+                    </div>
+                    
+                    <div id="authButtons">
+                        <button class="btn btn-light me-2" id="loginNavBtn">
+                            <i class="fas fa-sign-in-alt me-1"></i> Entrar
+                        </button>
+                        <button class="btn btn-outline-light" id="registerNavBtn">
+                            <i class="fas fa-user-plus me-1"></i> Cadastrar
+                        </button>
+                        <button class="btn btn-outline-light d-none" id="logoutNavBtn">
+                            <i class="fas fa-sign-out-alt me-1"></i> Sair
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container my-4">
+        <!-- Home View -->
+        <div id="homeView" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+               
+                <div class="d-flex align-items-center">
+                    <div class="input-group me-3" style="width: 250px;">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" id="locationSearch" placeholder="Buscar por local...">
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="distanceFilter" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-map-marker-alt me-1"></i>
+                            <span id="currentDistanceText">Raio: 50 km</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="distanceFilter">
+                            <li><a class="dropdown-item distance-option" href="#" data-distance="5">5 km</a></li>
+                            <li><a class="dropdown-item distance-option" href="#" data-distance="10">10 km</a></li>
+                            <li><a class="dropdown-item distance-option" href="#" data-distance="25">25 km</a></li>
+                            <li><a class="dropdown-item distance-option" href="#" data-distance="50">50 km</a></li>
+                            <li><a class="dropdown-item distance-option" href="#" data-distance="100">100 km</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item distance-option" href="#" data-distance="0">Todo o Brasil</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+             <h2 class="mb-0"><i class="fas fa-star me-2"></i>disponível</h2>
+             <br>
+            <div class="row g-4" id="featuredProducts">
+                <!-- Products will be loaded here -->
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-2">Carregando produtos...</p>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center mt-5 mb-4">
+                <h2 class="mb-0"><i class="fas fa-tags me-2"></i>Todas as Categorias</h2>
+                <a href="#" id="allCategoriesLink" class="btn btn-sm btn-outline-primary">Ver todas</a>
+            </div>
+            <div class="row g-4" id="popularCategories">
+                <!-- Categories will be loaded here -->
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-2">Carregando categorias...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories View -->
+        <div id="categoriesView" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0"><i class="fas fa-list me-2"></i>Todas as Categorias</h2>
+                <button class="btn btn-primary" id="addCategoryBtn">
+                    <i class="fas fa-plus me-1"></i> Adicionar
+                </button>
+            </div>
+            <div class="row g-4" id="allCategories">
+                <!-- All categories will be loaded here -->
+            </div>
+        </div>
+
+        <!-- New Ad View -->
+        <div id="newAdView" style="display: none;">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="mb-4"><i class="fas fa-plus-circle me-2"></i>Criar Novo Anúncio</h2>
+                    <form id="adForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="productName" class="form-label">Nome do Produto</label>
+                                <input type="text" class="form-control" id="productName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="productCategory" class="form-label">Categoria</label>
+                                <select class="form-select" id="productCategory" required>
+                                    <option value="">Selecione uma categoria</option>
+                                    <!-- Categories will be loaded here -->
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="productCondition" class="form-label">Condição</label>
+                                <select class="form-select" id="productCondition" required>
+                                    <option value="Novo">Novo</option>
+                                    <option value="Usado">Usado</option>
+                                    <option value="Semi-novo">Semi-novo</option>
+                                    <option value="Danificado">Danificado</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="productPrice" class="form-label">Preço (R$)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">R$</span>
+                                    <input type="number" class="form-control" id="productPrice" step="0.01" required>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="productImageFile" class="form-label">Imagem do Produto</label>
+                                <input type="file" class="form-control" id="productImageFile" accept="image/*" required>
+                                <div class="form-text">Selecione uma imagem (JPEG ou PNG, máximo 5MB)</div>
+                                <div class="mt-2" id="imagePreviewContainer" style="display: none;">
+                                    <img id="imagePreview" style="max-width: 200px; max-height: 200px;" class="img-thumbnail">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="productDescription" class="form-label">Descrição</label>
+                                <textarea class="form-control" id="productDescription" rows="4" required></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="sellerName" class="form-label">Seu Nome</label>
+                                <input type="text" class="form-control" id="sellerName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="sellerContact" class="form-label">Contato (WhatsApp)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">+55</span>
+                                    <input type="text" class="form-control" id="sellerContact" placeholder="11999999999" required>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-light">
+                                        <h6 class="mb-0">Localização</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label for="adState" class="form-label">Estado</label>
+                                                <select class="form-select" id="adState" required>
+                                                    <option value="">Selecione um estado</option>
+                                                    <!-- Estados serão carregados via JavaScript -->
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="adCity" class="form-label">Cidade</label>
+                                                <select class="form-select" id="adCity" required disabled>
+                                                    <option value="">Selecione uma cidade</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="useExactLocation">
+                                                    <label class="form-check-label" for="useExactLocation">
+                                                        Adicionar localização exata (opcional)
+                                                    </label>
+                                                </div>
+                                                <div id="exactLocationFields" style="display: none; margin-top: 1rem;">
+                                                    <p class="text-muted small mb-2">Sua localização exata não será exibida publicamente, apenas usada para calcular distâncias.</p>
+                                                    <button type="button" class="btn btn-sm btn-outline-primary" id="getCurrentLocationBtn">
+                                                        <i class="fas fa-location-arrow me-1"></i> Usar minha localização atual
+                                                    </button>
+                                                    <div class="mt-2" id="locationCoordinates" style="display: none;">
+                                                        <span class="badge bg-info">
+                                                            <i class="fas fa-map-marker-alt me-1"></i>
+                                                            <span id="coordinatesText"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-3">
+                                <button type="submit" class="btn btn-primary px-4 py-2">
+                                    <i class="fas fa-paper-plane me-2"></i> Publicar Anúncio
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Ads View -->
+        <div id="myAdsView" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0"><i class="fas fa-bullhorn me-2"></i>Meus Anúncios</h2>
+                <div>
+                    <button class="btn btn-primary me-2" id="newAdFromMyAdsBtn">
+                        <i class="fas fa-plus me-1"></i> Novo Anúncio
+                    </button>
+                </div>
+            </div>
+
+            <div class="row g-4" id="myAdsList">
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-2">Carregando seus anúncios...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Detail View -->
+        <div id="productDetailView" style="display: none;">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-0">
+                    <div class="row g-0">
+                        <div class="col-lg-6 p-4">
+                            <div class="position-relative rounded overflow-hidden" style="padding-top: 100%; background-color: #f8f9fa;">
+                                <img src="" class="position-absolute top-0 start-0 w-100 h-100 object-fit-contain p-4" id="detailProductImage" alt="Product Image">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h2 id="detailProductName" class="mb-2"></h2>
+                                    <div class="d-flex gap-2 mb-3">
+                                        <span class="badge bg-primary" id="detailProductCategory"></span>
+                                        <span class="badge bg-secondary" id="detailProductCondition"></span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline-secondary" id="backToListBtn">
+                                    <i class="fas fa-arrow-left me-1"></i> Voltar
+                                </button>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h3 class="text-success" id="detailProductPrice"></h3>
+                                <p class="text-muted mb-0">Preço negociável</p>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h5 class="mb-3">Descrição</h5>
+                                <p id="detailProductDescription" class="text-muted"></p>
+                            </div>
+                            
+                            <div class="card border-0 bg-light mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-3">Informações do Vendedor</h5>
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="me-3">
+                                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p class="mb-0 fw-bold" id="detailSellerName"></p>
+                                            <small class="text-muted">Membro desde 2023</small>
+                                        </div>
+                                    </div>
+                                    <a href="#" class="btn btn-success w-100 py-2" id="detailSellerContact">
+                                        <i class="fab fa-whatsapp me-2"></i> Contatar via WhatsApp
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-3">
+                                <button class="btn btn-primary py-2" id="makeOfferBtn">
+                                    <i class="fas fa-hand-holding-usd me-2"></i> Fazer Oferta
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Products View -->
+        <div id="categoryProductsView" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 id="categoryProductsTitle" class="mb-0"></h2>
+                <button class="btn btn-outline-primary" id="backToCategoriesBtn">
+                    <i class="fas fa-arrow-left me-1"></i> Voltar
+                </button>
+            </div>
+            <div class="row g-4" id="categoryProductsList">
+                <!-- Products in category will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Search Results View -->
+        <div id="searchResultsView" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 id="searchResultsTitle" class="mb-0"></h2>
+                <button class="btn btn-outline-primary" id="backToHomeFromSearchBtn">
+                    <i class="fas fa-arrow-left me-1"></i> Voltar
+                </button>
+            </div>
+            <div class="row g-4" id="searchResultsList">
+                <!-- Search results will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Auth View -->
+        <div id="authView">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <!-- Login Form -->
+                            <div id="loginContainer">
+                                <h2 class="mb-4 text-center"><i class="fas fa-sign-in-alt me-2"></i>Entrar</h2>
+                                <form id="loginForm">
+                                    <div class="mb-3">
+                                        <label for="loginEmail" class="form-label">E-mail</label>
+                                        <input type="email" class="form-control" id="loginEmail" placeholder="seu@email.com" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="loginPassword" class="form-label">Senha</label>
+                                        <input type="password" class="form-control" id="loginPassword" placeholder="Sua senha" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-sign-in-alt me-1"></i> Entrar
+                                    </button>
+                                </form>
+                                <div class="text-center mt-3">
+                                    <p>Não tem conta? <a href="#" id="showRegisterLink">Cadastre-se</a></p>
+                                </div>
+                            </div>
+                            
+                            <!-- Register Form -->
+                            <div id="registerContainer" style="display: none;">
+                                <h2 class="mb-4 text-center"><i class="fas fa-user-plus me-2"></i>Cadastrar</h2>
+                                <form id="registerForm">
+                                    <div class="mb-3">
+                                        <label for="registerName" class="form-label">Seu Nome</label>
+                                        <input type="text" class="form-control" id="registerName" placeholder="Nome completo" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="registerEmail" class="form-label">E-mail</label>
+                                        <input type="email" class="form-control" id="registerEmail" placeholder="seu@email.com" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="registerPassword" class="form-label">Senha</label>
+                                        <input type="password" class="form-control" id="registerPassword" placeholder="Mínimo 6 caracteres" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="registerPhone" class="form-label">WhatsApp</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">+55</span>
+                                            <input type="text" class="form-control" id="registerPhone" placeholder="11999999999" required>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-success w-100">
+                                        <i class="fas fa-user-plus me-1"></i> Cadastrar
+                                    </button>
+                                </form>
+                                <div class="text-center mt-3">
+                                    <p>Já tem conta? <a href="#" id="showLoginLink">Fazer login</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Category Modal -->
+    <div class="modal fade" id="addCategoryModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Adicionar Nova Categoria</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="categoryForm">
+                        <div class="mb-3">
+                            <label for="newCategoryName" class="form-label">Nome da Categoria</label>
+                            <input type="text" class="form-control" id="newCategoryName" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveCategoryBtn">Salvar Categoria</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Make Offer Modal -->
+    <div class="modal fade" id="makeOfferModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Fazer Oferta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="offerForm">
+                        <div class="mb-3">
+                            <label for="offerAmount" class="form-label">Valor da Oferta (R$)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">R$</span>
+                                <input type="number" class="form-control" id="offerAmount" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="offerMessage" class="form-label">Mensagem (opcional)</label>
+                            <textarea class="form-control" id="offerMessage" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="offerContact" class="form-label">Seu WhatsApp para contato</label>
+                            <div class="input-group">
+                                <span class="input-group-text">+55</span>
+                                <input type="text" class="form-control" id="offerContact" placeholder="11999999999" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="sendOfferBtn">Enviar Oferta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Ad Modal -->
+    <div class="modal fade" id="editAdModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Anúncio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editAdForm">
+                        <input type="hidden" id="editAdId">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="editProductName" class="form-label">Nome do Produto</label>
+                                <input type="text" class="form-control" id="editProductName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editProductCategory" class="form-label">Categoria</label>
+                                <select class="form-select" id="editProductCategory" required>
+                                    <option value="">Selecione uma categoria</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editProductCondition" class="form-label">Condição</label>
+                                <select class="form-select" id="editProductCondition" required>
+                                    <option value="Novo">Novo</option>
+                                    <option value="Usado">Usado</option>
+                                    <option value="Semi-novo">Semi-novo</option>
+                                    <option value="Danificado">Danificado</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editProductPrice" class="form-label">Preço (R$)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">R$</span>
+                                    <input type="number" class="form-control" id="editProductPrice" step="0.01" required>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="editProductImageFile" class="form-label">Nova Imagem do Produto (opcional)</label>
+                                <input type="file" class="form-control" id="editProductImageFile" accept="image/*">
+                                <div class="form-text">Deixe em branco para manter a imagem atual</div>
+                                <div class="mt-2" id="editImagePreviewContainer" style="display: none;">
+                                    <img id="editImagePreview" style="max-width: 200px; max-height: 200px;" class="img-thumbnail">
+                                </div>
+                                <input type="hidden" id="editProductCurrentImage">
+                            </div>
+                            <div class="col-12">
+                                <label for="editProductDescription" class="form-label">Descrição</label>
+                                <textarea class="form-control" id="editProductDescription" rows="4" required></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger me-auto" id="deleteAdBtn">
+                        <i class="fas fa-trash me-1"></i> Excluir Anúncio
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveAdChangesBtn">
+                        <i class="fas fa-save me-1"></i> Salvar Alterações
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
+    <!-- Bootstrap and other libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+    <script>
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyD8FxHqt1g2V-mmureRPQyYe6QCuRSieGI",
+          authDomain: "marketplaceconnect-af26d.firebaseapp.com",
+          databaseURL: "https://marketplaceconnect-af26d-default-rtdb.firebaseio.com",
+          projectId: "marketplaceconnect-af26d",
+          storageBucket: "marketplaceconnect-af26d.firebasestorage.app",
+          messagingSenderId: "768552546759",
+          appId: "1:768552546759:web:4367fc4a161ecf90c469e2",
+          measurementId: "G-7HHR78MHDP"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        const storage = firebase.storage();
+        const storageRef = storage.ref();
+        
+        // DOM elements
+        const views = {
+            home: document.getElementById('homeView'),
+            categories: document.getElementById('categoriesView'),
+            newAd: document.getElementById('newAdView'),
+            myAds: document.getElementById('myAdsView'),
+            productDetail: document.getElementById('productDetailView'),
+            categoryProducts: document.getElementById('categoryProductsView'),
+            searchResults: document.getElementById('searchResultsView'),
+            auth: document.getElementById('authView')
+        };
+
+        const navLinks = {
+            home: document.getElementById('homeLink'),
+            categories: document.getElementById('categoriesLink'),
+            newAd: document.getElementById('newAdLink'),
+            myAds: document.getElementById('myAdsLink'),
+            allCategories: document.getElementById('allCategoriesLink')
+        };
+
+        const authButtons = {
+            loginNav: document.getElementById('loginNavBtn'),
+            registerNav: document.getElementById('registerNavBtn'),
+            logoutNav: document.getElementById('logoutNavBtn')
+        };
+
+        // Current state
+        let currentState = {
+            product: null,
+            category: null,
+            searchQuery: null,
+            currentUser: null,
+            selectedImageFile: null,
+            editImageFile: null,
+            adLocation: null
+        };
+
+        // Configuração de localidade
+        const locationConfig = {
+            currentState: null,
+            currentCity: null,
+            userLocation: null,
+            searchDistance: 50, // km
+            states: [], // Será carregado com os estados do Brasil
+            cities: []  // Será carregado com as cidades do estado selecionado
+        };
+
+        function initApp() {
+            setupEventListeners();
+            setupFileUploadListeners();
+            initLocationModule();
+            
+            // Check auth state
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    // User is signed in
+                    currentState.currentUser = user;
+                    updateAuthUI(true);
+                    showView('home');
+                    loadFeaturedProducts();
+                    loadCategories();
+                    
+                    // Pre-fill seller info
+                    db.collection('users').doc(user.uid).get()
+                        .then(doc => {
+                            if (doc.exists) {
+                                const userData = doc.data();
+                                document.getElementById('sellerName').value = userData.name || '';
+                                document.getElementById('sellerContact').value = userData.phone || '';
+                            }
+                        });
+                } else {
+                    // No user is signed in
+                    currentState.currentUser = null;
+                    updateAuthUI(false);
+                    showView('auth');
+                }
+            });
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Navigation
+            navLinks.home.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentState.currentUser) {
+                    showView('home');
+                } else {
+                    showView('auth');
+                }
+            });
+            
+            navLinks.categories.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentState.currentUser) {
+                    showView('categories');
+                } else {
+                    showView('auth');
+                }
+            });
+            
+            navLinks.newAd.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentState.currentUser) {
+                    showView('newAd');
+                } else {
+                    showView('auth');
+                    document.getElementById('showLoginLink').click();
+                }
+            });
+            
+            navLinks.myAds.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentState.currentUser) {
+                    showView('myAds');
+                    loadMyAds();
+                } else {
+                    showView('auth');
+                    document.getElementById('showLoginLink').click();
+                }
+            });
+            
+            navLinks.allCategories.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentState.currentUser) {
+                    showView('categories');
+                } else {
+                    showView('auth');
+                }
+            });
+            
+            // Auth navigation
+            authButtons.loginNav.addEventListener('click', (e) => {
+                e.preventDefault();
+                showView('auth');
+                document.getElementById('showLoginLink').click();
+            });
+            
+            authButtons.registerNav.addEventListener('click', (e) => {
+                e.preventDefault();
+                showView('auth');
+                document.getElementById('showRegisterLink').click();
+            });
+            
+            authButtons.logoutNav.addEventListener('click', (e) => {
+                e.preventDefault();
+                handleLogout();
+            });
+            
+            document.getElementById('newAdFromMyAdsBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                showView('newAd');
+            });
+            
+            document.getElementById('showRegisterLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('registerContainer').style.display = 'block';
+            });
+            
+            document.getElementById('showLoginLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('registerContainer').style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'block';
+            });
+            
+            // Forms
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('registerForm').addEventListener('submit', handleRegister);
+            document.getElementById('adForm').addEventListener('submit', handleNewAdSubmit);
+            document.getElementById('addCategoryBtn').addEventListener('click', showAddCategoryModal);
+            document.getElementById('saveCategoryBtn').addEventListener('click', handleAddCategory);
+            document.getElementById('makeOfferBtn').addEventListener('click', showMakeOfferModal);
+            document.getElementById('sendOfferBtn').addEventListener('click', handleMakeOffer);
+            document.getElementById('saveAdChangesBtn').addEventListener('click', handleSaveAdChanges);
+            document.getElementById('deleteAdBtn').addEventListener('click', handleDeleteAd);
+            
+            // Back buttons
+            document.getElementById('backToListBtn').addEventListener('click', () => {
+                if (currentState.currentUser) {
+                    showView('home');
+                } else {
+                    showView('auth');
+                }
+            });
+            document.getElementById('backToCategoriesBtn').addEventListener('click', () => showView('categories'));
+            document.getElementById('backToHomeFromSearchBtn').addEventListener('click', () => showView('home'));
+        }
+
+        // Set up file upload listeners
+        function setupFileUploadListeners() {
+            // Listener for new ad image upload
+            document.getElementById('productImageFile').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Validations
+                    if (!file.type.match(/image\/(jpeg|png|jpg)/)) {
+                        alert('Apenas formatos JPEG e PNG são permitidos!');
+                        e.target.value = '';
+                        return;
+                    }
+                    
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('O tamanho máximo permitido é 5MB!');
+                        e.target.value = '';
+                        return;
+                    }
+                    
+                    currentState.selectedImageFile = file;
+                    
+                    // Preview
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        document.getElementById('imagePreview').src = e.target.result;
+                        document.getElementById('imagePreviewContainer').style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    currentState.selectedImageFile = null;
+                    document.getElementById('imagePreviewContainer').style.display = 'none';
+                }
+            });
+            
+            // Listener for edit ad image upload
+            document.getElementById('editProductImageFile').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Validations
+                    if (!file.type.match(/image\/(jpeg|png|jpg)/)) {
+                        alert('Apenas formatos JPEG e PNG são permitidos!');
+                        e.target.value = '';
+                        return;
+                    }
+                    
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('O tamanho máximo permitido é 5MB!');
+                        e.target.value = '';
+                        return;
+                    }
+                    
+                    currentState.editImageFile = file;
+                    
+                    // Preview
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        document.getElementById('editImagePreview').src = e.target.result;
+                        document.getElementById('editImagePreviewContainer').style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    currentState.editImageFile = null;
+                    document.getElementById('editImagePreviewContainer').style.display = 'none';
+                }
+            });
+        }
+
+        // Função para inicializar o módulo de localidade
+        function initLocationModule() {
+            // Carrega os estados do Brasil
+            loadBrazilianStates();
+            
+            // Configura os event listeners
+            setupLocationEventListeners();
+            
+            // Tenta carregar a localização salva no localStorage
+            loadSavedLocation();
+            
+            // Configura o formulário de localização para anúncios
+            setupAdLocationForm();
+        }
+
+        // Carrega a lista de estados brasileiros
+        function loadBrazilianStates() {
+            // Você pode usar uma API como IBGE ou manter uma lista estática
+            // Aqui está uma lista simplificada de estados
+            locationConfig.states = [
+                { "sigla": "AC", "nome": "Acre" },
+                { "sigla": "AL", "nome": "Alagoas" },
+                { "sigla": "AP", "nome": "Amapá" },
+                { "sigla": "AM", "nome": "Amazonas" },
+                { "sigla": "BA", "nome": "Bahia" },
+                { "sigla": "CE", "nome": "Ceará" },
+                { "sigla": "DF", "nome": "Distrito Federal" },
+                { "sigla": "ES", "nome": "Espírito Santo" },
+                { "sigla": "GO", "nome": "Goiás" },
+                { "sigla": "MA", "nome": "Maranhão" },
+                { "sigla": "MT", "nome": "Mato Grosso" },
+                { "sigla": "MS", "nome": "Mato Grosso do Sul" },
+                { "sigla": "MG", "nome": "Minas Gerais" },
+                { "sigla": "PA", "nome": "Pará" },
+                { "sigla": "PB", "nome": "Paraíba" },
+                { "sigla": "PR", "nome": "Paraná" },
+                { "sigla": "PE", "nome": "Pernambuco" },
+                { "sigla": "PI", "nome": "Piauí" },
+                { "sigla": "RJ", "nome": "Rio de Janeiro" },
+                { "sigla": "RN", "nome": "Rio Grande do Norte" },
+                { "sigla": "RS", "nome": "Rio Grande do Sul" },
+                { "sigla": "RO", "nome": "Rondônia" },
+                { "sigla": "RR", "nome": "Roraima" },
+                { "sigla": "SC", "nome": "Santa Catarina" },
+                { "sigla": "SP", "nome": "São Paulo" },
+                { "sigla": "SE", "nome": "Sergipe" },
+                { "sigla": "TO", "nome": "Tocantins" }
+            ];
+            
+            // Preenche o dropdown de estados
+            const stateSelect = document.getElementById('stateSelect');
+            locationConfig.states.forEach(state => {
+                const option = document.createElement('option');
+                option.value = state.sigla;
+                option.textContent = state.nome;
+                stateSelect.appendChild(option);
+            });
+        }
+
+        // Configura os event listeners para o módulo de localidade
+        function setupLocationEventListeners() {
+            // Quando um estado é selecionado, carrega as cidades
+            document.getElementById('stateSelect').addEventListener('change', function() {
+                const state = this.value;
+                if (state) {
+                    loadCitiesForState(state);
+                    document.getElementById('citySelect').disabled = false;
+                } else {
+                    document.getElementById('citySelect').disabled = true;
+                    document.getElementById('citySelect').innerHTML = '<option value="">Selecione uma cidade</option>';
+                }
+            });
+            
+            // Aplica a localização selecionada
+            document.getElementById('applyLocationBtn').addEventListener('click', applyLocation);
+            
+            // Usar localização atual
+            document.getElementById('useMyLocation').addEventListener('change', function() {
+                if (this.checked) {
+                    getUserLocation();
+                }
+            });
+            
+            // Filtro de distância
+            document.querySelectorAll('.distance-option').forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const distance = parseInt(this.getAttribute('data-distance'));
+                    setSearchDistance(distance);
+                });
+            });
+            
+            // Busca por local
+            document.getElementById('locationSearch').addEventListener('input', function() {
+                filterProductsByLocation(this.value);
+            });
+        }
+
+        // Configura a localização no formulário de anúncio
+        function setupAdLocationForm() {
+            // Preenche o dropdown de estados
+            const stateSelect = document.getElementById('adState');
+            locationConfig.states.forEach(state => {
+                const option = document.createElement('option');
+                option.value = state.sigla;
+                option.textContent = state.nome;
+                stateSelect.appendChild(option);
+            });
+            
+            // Quando um estado é selecionado, carrega as cidades
+            stateSelect.addEventListener('change', function() {
+                const state = this.value;
+                const citySelect = document.getElementById('adCity');
+                
+                if (state) {
+                    loadCitiesForState(state, 'adCity');
+                    citySelect.disabled = false;
+                } else {
+                    citySelect.disabled = true;
+                    citySelect.innerHTML = '<option value="">Selecione uma cidade</option>';
+                }
+            });
+            
+            // Mostra/oculta campos de localização exata
+            document.getElementById('useExactLocation').addEventListener('change', function() {
+                document.getElementById('exactLocationFields').style.display = this.checked ? 'block' : 'none';
+            });
+            
+            // Obtém a localização atual
+            document.getElementById('getCurrentLocationBtn').addEventListener('click', function() {
+                if (navigator.geolocation) {
+                    const button = this;
+                    const originalText = button.innerHTML;
+                    
+                    button.disabled = true;
+                    button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Obtendo localização...';
+                    
+                    navigator.geolocation.getCurrentPosition(
+                        position => {
+                            const coords = {
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude
+                            };
+                            
+                            // Mostra as coordenadas (apenas para feedback visual)
+                            document.getElementById('coordinatesText').textContent = 
+                                `${coords.latitude.toFixed(4)}, ${coords.longitude.toFixed(4)}`;
+                            document.getElementById('locationCoordinates').style.display = 'block';
+                            
+                            // Armazena as coordenadas para enviar com o formulário
+                            currentState.adLocation = coords;
+                            
+                            button.disabled = false;
+                            button.innerHTML = originalText;
+                        },
+                        error => {
+                            console.error("Erro ao obter localização:", error);
+                            alert("Não foi possível obter sua localização. Verifique as permissões do navegador.");
+                            button.disabled = false;
+                            button.innerHTML = originalText;
+                        }
+                    );
+                } else {
+                    alert("Geolocalização não é suportada por este navegador.");
+                }
+            });
+        }
+
+        // Carrega as cidades para um estado específico
+        function loadCitiesForState(stateSigla, citySelectId = 'citySelect') {
+            const citySelect = document.getElementById(citySelectId);
+            citySelect.innerHTML = '<option value="">Carregando cidades...</option>';
+            
+            // Simulando uma requisição assíncrona
+            setTimeout(() => {
+                // Exemplo de cidades para alguns estados
+                const citiesByState = {
+                    "SP": ["São Paulo", "Campinas", "São Bernardo do Campo", "Santo André", "Osasco", "Sorocaba"],
+                    "RJ": ["Rio de Janeiro", "Niterói", "Nova Iguaçu", "Duque de Caxias", "São Gonçalo"],
+                    "MG": ["Belo Horizonte", "Uberlândia", "Contagem", "Juiz de Fora", "Betim"],
+                    "RS": ["Porto Alegre", "Caxias do Sul", "Pelotas", "Canoas", "Santa Maria"]
+                };
+                
+                citySelect.innerHTML = '<option value="">Selecione uma cidade</option>';
+                
+                if (citiesByState[stateSigla]) {
+                    citiesByState[stateSigla].forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city;
+                        option.textContent = city;
+                        citySelect.appendChild(option);
+                    });
+                } else {
+                    // Se não tivermos cidades para esse estado, adiciona uma opção genérica
+                    const option = document.createElement('option');
+                    option.value = "Todas as cidades";
+                    option.textContent = "Todas as cidades";
+                    citySelect.appendChild(option);
+                }
+            }, 500);
+        }
+
+        // Obtém a localização atual do usuário
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        locationConfig.userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        
+                        // Atualiza a UI para mostrar que a localização foi obtida
+                        document.getElementById('useMyLocation').checked = true;
+                        document.getElementById('stateSelect').value = '';
+                        document.getElementById('citySelect').disabled = true;
+                        document.getElementById('citySelect').innerHTML = '<option value="">Localização atual</option>';
+                        
+                        // Usa uma API de geocodificação reversa para obter o nome da cidade (opcional)
+                        // Neste exemplo, vamos apenas mostrar as coordenadas
+                        document.getElementById('currentLocationText').textContent = 
+                            `Minha localização (${locationConfig.userLocation.lat.toFixed(4)}, ${locationConfig.userLocation.lng.toFixed(4)})`;
+                    },
+                    error => {
+                        console.error("Erro ao obter localização:", error);
+                        alert("Não foi possível obter sua localização. Verifique as permissões do navegador.");
+                        document.getElementById('useMyLocation').checked = false;
+                    }
+                );
+            } else {
+                alert("Geolocalização não é suportada por este navegador.");
+                document.getElementById('useMyLocation').checked = false;
+            }
+        }
+
+        // Aplica a localização selecionada
+        function applyLocation() {
+            const stateSelect = document.getElementById('stateSelect');
+            const citySelect = document.getElementById('citySelect');
+            const useMyLocation = document.getElementById('useMyLocation').checked;
+            
+            if (useMyLocation && locationConfig.userLocation) {
+                // Usando a localização atual do usuário
+                locationConfig.currentState = "Localização Atual";
+                locationConfig.currentCity = null;
+                document.getElementById('currentLocationText').textContent = "Minha localização";
+                
+                // Salva no localStorage
+                saveLocationToStorage();
+                
+                // Filtra os produtos
+                filterProductsByDistance();
+            } else if (stateSelect.value) {
+                // Usando estado/cidade selecionada
+                locationConfig.currentState = stateSelect.options[stateSelect.selectedIndex].text;
+                locationConfig.currentCity = citySelect.value ? citySelect.options[citySelect.selectedIndex].text : null;
+                
+                // Atualiza o texto no botão
+                let locationText = locationConfig.currentState;
+                if (locationConfig.currentCity) {
+                    locationText += `, ${locationConfig.currentCity}`;
+                }
+                document.getElementById('currentLocationText').textContent = locationText;
+                
+                // Salva no localStorage
+                saveLocationToStorage();
+                
+                // Filtra os produtos
+                filterProductsByLocation();
+            } else {
+                alert("Por favor, selecione um estado ou use sua localização atual.");
+                return;
+            }
+            
+            // Fecha o dropdown
+            const dropdown = bootstrap.Dropdown.getInstance(document.getElementById('locationDropdown'));
+            dropdown.hide();
+        }
+
+        // Define a distância de busca
+        function setSearchDistance(distance) {
+            locationConfig.searchDistance = distance;
+            document.getElementById('currentDistanceText').textContent = distance === 0 ? 
+                "Todo o Brasil" : `Raio: ${distance} km`;
+            
+            // Salva no localStorage
+            localStorage.setItem('searchDistance', distance.toString());
+            
+            // Aplica o filtro
+            if (locationConfig.userLocation || (locationConfig.currentState && locationConfig.currentCity)) {
+                filterProductsByDistance();
+            }
+        }
+
+        // Filtra produtos por localização (texto)
+        function filterProductsByLocation(searchText = '') {
+            // Implementação simplificada - na prática você faria uma query no Firestore
+            const products = document.querySelectorAll('#featuredProducts .product-card');
+            
+            products.forEach(product => {
+                const locationElement = product.querySelector('.product-location');
+                const locationText = locationElement ? locationElement.textContent.toLowerCase() : '';
+                
+                if (searchText === '' || locationText.includes(searchText.toLowerCase())) {
+                    product.style.display = '';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+
+        // Filtra produtos por distância (para localização atual)
+        function filterProductsByDistance() {
+            if (!locationConfig.userLocation) return;
+            
+            // Mostra loading
+            const productsContainer = document.getElementById('featuredProducts');
+            productsContainer.innerHTML = '<div class="col-12 text-center py-5"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Filtrando por localização...</p></div>';
+            
+            // Busca produtos no Firestore com geolocalização
+            db.collection('products')
+                .get()
+                .then(querySnapshot => {
+                    productsContainer.innerHTML = '';
+                    
+                    if (querySnapshot.empty) {
+                        productsContainer.innerHTML = '<div class="col-12 text-center py-5"><p>Nenhum produto encontrado.</p></div>';
+                        return;
+                    }
+                    
+                    let hasResults = false;
+                    
+                    querySnapshot.forEach(doc => {
+                        const product = doc.data();
+                        
+                        // Verifica se o produto tem coordenadas
+                        if (product.location && product.location.latitude && product.location.longitude) {
+                            const distance = calculateDistance(
+                                locationConfig.userLocation.lat,
+                                locationConfig.userLocation.lng,
+                                product.location.latitude,
+                                product.location.longitude
+                            );
+                            
+                            // Se estiver dentro do raio ou se o raio for 0 (todo o Brasil)
+                            if (locationConfig.searchDistance === 0 || distance <= locationConfig.searchDistance) {
+                                const productCard = createProductCard(product, doc.id);
+                                // Adiciona a distância ao card
+                                const distanceBadge = document.createElement('span');
+                                distanceBadge.className = 'product-badge bg-info ms-2';
+                                distanceBadge.textContent = `${distance.toFixed(1)} km`;
+                                productCard.querySelector('.product-badges').appendChild(distanceBadge);
+                                
+                                productsContainer.appendChild(productCard);
+                                hasResults = true;
+                            }
+                        }
+                    });
+                    
+                    if (!hasResults) {
+                        productsContainer.innerHTML = `<div class="col-12 text-center py-5">
+                            <p>Nenhum produto encontrado no raio de ${locationConfig.searchDistance} km.</p>
+                            <button class="btn btn-primary" onclick="setSearchDistance(0)">Mostrar de todo o Brasil</button>
+                        </div>`;
+                    }
+                })
+                .catch(error => {
+                    console.error("Error filtering products: ", error);
+                    productsContainer.innerHTML = '<div class="col-12 text-center py-5"><p>Ocorreu um erro ao filtrar os produtos.</p></div>';
+                });
+        }
+
+        // Calcula a distância entre duas coordenadas (fórmula de Haversine)
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Raio da Terra em km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = 
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        // Salva a localização no localStorage
+        function saveLocationToStorage() {
+            const locationData = {
+                state: locationConfig.currentState,
+                city: locationConfig.currentCity,
+                userLocation: locationConfig.userLocation,
+                timestamp: new Date().getTime()
+            };
+            
+            localStorage.setItem('userLocation', JSON.stringify(locationData));
+        }
+
+        // Carrega a localização salva no localStorage
+        function loadSavedLocation() {
+            const savedLocation = localStorage.getItem('userLocation');
+            const savedDistance = localStorage.getItem('searchDistance');
+            
+            if (savedLocation) {
+                const locationData = JSON.parse(savedLocation);
+                
+                locationConfig.currentState = locationData.state;
+                locationConfig.currentCity = locationData.city;
+                locationConfig.userLocation = locationData.userLocation;
+                
+                // Atualiza a UI
+                if (locationConfig.userLocation) {
+                    document.getElementById('currentLocationText').textContent = "Minha localização";
+                    document.getElementById('useMyLocation').checked = true;
+                } else if (locationConfig.currentState) {
+                    let locationText = locationConfig.currentState;
+                    if (locationConfig.currentCity) {
+                        locationText += `, ${locationConfig.currentCity}`;
+                    }
+                    document.getElementById('currentLocationText').textContent = locationText;
+                    
+                    // Seleciona o estado/cidade nos dropdowns
+                    const stateOption = Array.from(document.getElementById('stateSelect').options)
+                        .find(option => option.text === locationConfig.currentState);
+                    if (stateOption) {
+                        stateOption.selected = true;
+                        // Dispara o evento change para carregar as cidades
+                        document.getElementById('stateSelect').dispatchEvent(new Event('change'));
+                        
+                        // Depois que as cidades são carregadas (assíncrono), seleciona a cidade
+                        setTimeout(() => {
+                            const cityOption = Array.from(document.getElementById('citySelect').options)
+                                .find(option => option.text === locationConfig.currentCity);
+                            if (cityOption) {
+                                cityOption.selected = true;
+                            }
+                        }, 600);
+                    }
+                }
+            }
+            
+            if (savedDistance) {
+                setSearchDistance(parseInt(savedDistance));
+            } else {
+                setSearchDistance(50); // Valor padrão
+            }
+        }
+
+        // Update auth UI based on login state
+        function updateAuthUI(isLoggedIn) {
+            if (isLoggedIn) {
+                authButtons.loginNav.classList.add('d-none');
+                authButtons.registerNav.classList.add('d-none');
+                authButtons.logoutNav.classList.remove('d-none');
+            } else {
+                authButtons.loginNav.classList.remove('d-none');
+                authButtons.registerNav.classList.remove('d-none');
+                authButtons.logoutNav.classList.add('d-none');
+            }
+        }
+
+        // Show a specific view and hide others
+        function showView(viewName) {
+            // Hide all views
+            Object.values(views).forEach(view => {
+                if (view) view.style.display = 'none';
+            });
+            
+            // Show the selected view
+            if (views[viewName]) {
+                views[viewName].style.display = 'block';
+            }
+            
+            // Update navigation highlights
+            Object.values(navLinks).forEach(link => {
+                if (link) link.classList.remove('active');
+            });
+            
+            if (navLinks[viewName]) {
+                navLinks[viewName].classList.add('active');
+            }
+            
+            // Load specific data if needed
+            if (viewName === 'categories') {
+                loadAllCategories();
+            } else if (viewName === 'newAd') {
+                loadCategoryDropdown('productCategory');
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Load featured products
+        function loadFeaturedProducts() {
+            const productsContainer = document.getElementById('featuredProducts');
+            productsContainer.innerHTML = '<div class="col-12 text-center py-5"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Carregando produtos...</p></div>';
+            
+            db.collection('products').orderBy('createdAt', 'desc').limit(8).get()
+                .then(querySnapshot => {
+                    productsContainer.innerHTML = '';
+                    
+                    if (querySnapshot.empty) {
+                        productsContainer.innerHTML = '<div class="col-12 text-center py-5"><p>Nenhum produto encontrado.</p></div>';
+                        return;
+                    }
+                    
+                    let delay = 0;
+                    querySnapshot.forEach(doc => {
+                        const product = doc.data();
+                        const productCard = createProductCard(product, doc.id);
+                        productCard.style.animationDelay = `${delay}ms`;
+                        productCard.classList.add('fade-in');
+                        productsContainer.appendChild(productCard);
+                        delay += 100;
+                    });
+                })
+                .catch(error => {
+                    console.error("Error loading products: ", error);
+                    productsContainer.innerHTML = '<div class="col-12 text-center py-5"><p>Ocorreu um erro ao carregar os produtos.</p></div>';
+                });
+        }
+
+        // Load popular categories
+        function loadCategories() {
+            const categoriesContainer = document.getElementById('popularCategories');
+            categoriesContainer.innerHTML = '<div class="col-12 text-center py-5"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Carregando categorias...</p></div>';
+            
+            db.collection('categories').limit(6).get()
+                .then(querySnapshot => {
+                    categoriesContainer.innerHTML = '';
+                    
+                    if (querySnapshot.empty) {
+                        categoriesContainer.innerHTML = '<div class="col-12 text-center py-5"><p>Nenhuma categoria encontrada.</p></div>';
+                        return;
+                    }
+                    
+                    let delay = 0;
+                    querySnapshot.forEach(doc => {
+                        const category = doc.data();
+                        const categoryCard = createCategoryCard(category, doc.id);
+                        categoryCard.style.animationDelay = `${delay}ms`;
+                        categoryCard.classList.add('fade-in');
+                        categoriesContainer.appendChild(categoryCard);
+                        delay += 100;
+                    });
+                })
+                .catch(error => {
+                    console.error("Error loading categories: ", error);
+                    categoriesContainer.innerHTML = '<div class="col-12 text-center py-5"><p>Ocorreu um erro ao carregar as categorias.</p></div>';
+                });
+        }
+
+        // Load all categories for categories view
+        function loadAllCategories() {
+            const categoriesContainer = document.getElementById('allCategories');
+            categoriesContainer.innerHTML = '<div class="col-12 text-center py-5"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Carregando categorias...</p></div>';
+            
+            db.collection('categories').get()
+                .then(querySnapshot => {
+                    categoriesContainer.innerHTML = '';
+                    
+                    if (querySnapshot.empty) {
+                        categoriesContainer.innerHTML = '<div class="col-12 text-center py-5"><p>Nenhuma categoria encontrada.</p></div>';
+                        return;
+                    }
+                    
+                    let delay = 0;
+                    querySnapshot.forEach(doc => {
+                        const category = doc.data();
+                        const categoryCard = createCategoryCard(category, doc.id, true);
+                        categoryCard.style.animationDelay = `${delay}ms`;
+                        categoryCard.classList.add('fade-in');
+                        categoriesContainer.appendChild(categoryCard);
+                        delay += 100;
+                    });
+                })
+                .catch(error => {
+                    console.error("Error loading categories: ", error);
+                    categoriesContainer.innerHTML = '<div class="col-12 text-center py-5"><p>Ocorreu um erro ao carregar as categorias.</p></div>';
+                });
+        }
+
+        // Load category dropdown
+        function loadCategoryDropdown(elementId, selectedCategoryId = '') {
+            const dropdown = document.getElementById(elementId);
+            dropdown.innerHTML = '<option value="">Carregando categorias...</option>';
+            
+            db.collection('categories').get()
+                .then(querySnapshot => {
+                    dropdown.innerHTML = '<option value="">Selecione uma categoria</option>';
+                    
+                    querySnapshot.forEach(doc => {
+                        const option = document.createElement('option');
+                        option.value = doc.id;
+                        option.textContent = doc.data().name;
+                        option.selected = (doc.id === selectedCategoryId);
+                        dropdown.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error loading categories: ", error);
+                    dropdown.innerHTML = '<option value="">Erro ao carregar categorias</option>';
+                });
+        }
+
+        // Create product card element
+        function createProductCard(product, id) {
+            const col = document.createElement('div');
+            col.className = 'col-md-6 col-lg-4 col-xl-3 mb-4';
+            
+            const card = document.createElement('div');
+            card.className = 'product-card h-100';
+            card.addEventListener('click', () => showProductDetail(product, id));
+            
+            // Image container
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'product-image-container';
+            
+            // Image or placeholder
+            if (product.image) {
+                const img = document.createElement('img');
+                img.className = 'product-image';
+                img.src = product.image;
+                img.alt = product.name;
+                img.loading = 'lazy';
+                imgContainer.appendChild(img);
+            } else {
+                const placeholder = document.createElement('div');
+                placeholder.className = 'd-flex align-items-center justify-content-center h-100 text-muted';
+                const icon = document.createElement('i');
+                icon.className = 'fas fa-box-open fa-3x';
+                placeholder.appendChild(icon);
+                imgContainer.appendChild(placeholder);
+            }
+            
+            // Card body
+            const cardBody = document.createElement('div');
+            cardBody.className = 'product-body';
+            
+            // Title
+            const title = document.createElement('h5');
+            title.className = 'product-title';
+            title.textContent = product.name;
+            
+            // Badges (category and condition)
+            const badges = document.createElement('div');
+            badges.className = 'product-badges';
+            
+            const category = document.createElement('span');
+            category.className = 'product-badge bg-primary';
+            category.textContent = product.categoryName || 'Geral';
+            
+            const condition = document.createElement('span');
+            condition.className = 'product-badge badge-condition';
+            condition.textContent = product.condition;
+            condition.setAttribute('data-condition', product.condition);
+            
+            badges.appendChild(category);
+            badges.appendChild(condition);
+            
+            // Price
+            const price = document.createElement('div');
+            price.className = 'product-price';
+            price.textContent = `R$ ${product.price.toFixed(2).replace('.', ',')}`;
+            
+            // Description
+            const description = document.createElement('p');
+            description.className = 'product-description';
+            description.textContent = product.description || 'Descrição não disponível.';
+            
+            // Location
+            const location = document.createElement('div');
+            location.className = 'product-location';
+            location.innerHTML = `<i class="fas fa-map-marker-alt me-1"></i>${product.locationText || 'Localização não informada'}`;
+            
+            // Assemble card
+            cardBody.appendChild(title);
+            cardBody.appendChild(badges);
+            cardBody.appendChild(price);
+            cardBody.appendChild(description);
+            cardBody.appendChild(location);
+            
+            card.appendChild(imgContainer);
+            card.appendChild(cardBody);
+            
+            col.appendChild(card);
+            return col;
+        }
+
+        // Create ad card element with edit and delete buttons
+        function createAdCard(product, id) {
+            const col = document.createElement('div');
+            col.className = 'col-md-6 col-lg-4 col-xl-3 mb-4';
+            
+            const card = document.createElement('div');
+            card.className = 'product-card h-100';
+            
+            // Image container
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'product-image-container';
+            
+            // Image or placeholder
+            if (product.image) {
+                const img = document.createElement('img');
+                img.className = 'product-image';
+                img.src = product.image;
+                img.alt = product.name;
+                img.loading = 'lazy';
+                imgContainer.appendChild(img);
+            } else {
+                const placeholder = document.createElement('div');
+                placeholder.className = 'd-flex align-items-center justify-content-center h-100 text-muted';
+                const icon = document.createElement('i');
+                icon.className = 'fas fa-box-open fa-3x';
+                placeholder.appendChild(icon);
+                imgContainer.appendChild(placeholder);
+            }
+            
+            // Card body
+            const cardBody = document.createElement('div');
+            cardBody.className = 'product-body';
+            
+            // Title
+            const title = document.createElement('h5');
+            title.className = 'product-title';
+            title.textContent = product.name;
+            
+            // Badges (category and condition)
+            const badges = document.createElement('div');
+            badges.className = 'product-badges';
+            
+            const category = document.createElement('span');
+            category.className = 'product-badge bg-primary';
+            category.textContent = product.categoryName || 'Geral';
+            
+            const condition = document.createElement('span');
+            condition.className = 'product-badge badge-condition';
+            condition.textContent = product.condition;
+            condition.setAttribute('data-condition', product.condition);
+            
+            badges.appendChild(category);
+            badges.appendChild(condition);
+            
+            // Price
+            const price = document.createElement('div');
+            price.className = 'product-price';
+            price.textContent = `R$ ${product.price.toFixed(2).replace('.', ',')}`;
+            
+            // Location
+            const location = document.createElement('div');
+            location.className = 'product-location';
+            location.innerHTML = `<i class="fas fa-map-marker-alt me-1"></i>${product.locationText || 'Localização não informada'}`;
+            
+            // Action buttons
+            const actionButtons = document.createElement('div');
+            actionButtons.className = 'd-flex justify-content-between mt-3';
+            
+            const editBtn = document.createElement('button');
+            editBtn.className = 'btn btn-sm btn-outline-primary';
+            editBtn.innerHTML = '<i class="fas fa-edit me-1"></i> Editar';
+            editBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showEditModal(product, id);
+            });
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'btn btn-sm btn-outline-danger';
+            deleteBtn.innerHTML = '<i class="fas fa-trash me-1"></i> Excluir';
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (confirm('Tem certeza que deseja excluir este anúncio?')) {
+                    deleteAd(id);
+                }
+            });
+            
+            actionButtons.appendChild(editBtn);
+            actionButtons.appendChild(deleteBtn);
+            
+            // Assemble card
+            cardBody.appendChild(title);
+            cardBody.appendChild(badges);
+            cardBody.appendChild(price);
+            cardBody.appendChild(location);
+            cardBody.appendChild(actionButtons);
+            
+            card.appendChild(imgContainer);
+            card.appendChild(cardBody);
+            
+            col.appendChild(card);
+            return col;
+        }
+
+        // Create category card element
+        function createCategoryCard(category, id, fullWidth = false) {
+            const col = document.createElement('div');
+            col.className = fullWidth ? 'col-md-4 col-sm-6 mb-4' : 'col-md-2 col-4 mb-4';
+            
+            const card = document.createElement('div');
+            card.className = 'category-card';
+            card.addEventListener('click', () => showCategoryProducts(category, id));
+            
+            const icon = document.createElement('i');
+            icon.className = 'fas fa-folder';
+            
+            const name = document.createElement('h5');
+            name.className = 'mb-0';
+            name.textContent = category.name;
+            
+            card.appendChild(icon);
+            card.appendChild(name);
+            
+            col.appendChild(card);
+            return col;
+        }
+
+        // Show product detail view
+        function showProductDetail(product, id) {
+            currentState.product = { ...product, id };
+            
+            document.getElementById('detailProductName').textContent = product.name;
+            document.getElementById('detailProductCategory').textContent = product.categoryName || 'Sem categoria';
+            document.getElementById('detailProductCondition').textContent = product.condition;
+            document.getElementById('detailProductPrice').textContent = `R$ ${product.price.toFixed(2).replace('.', ',')}`;
+            document.getElementById('detailProductDescription').textContent = product.description || 'Descrição não fornecida pelo vendedor.';
+            document.getElementById('detailProductImage').src = product.image || 'https://via.placeholder.com/500?text=Sem+Imagem';
+            document.getElementById('detailSellerName').textContent = product.sellerName || 'Anônimo';
+            
+            const whatsappLink = document.getElementById('detailSellerContact');
+            whatsappLink.href = `https://wa.me/55${product.sellerContact}`;
+            whatsappLink.target = '_blank';
+            
+            showView('productDetail');
+        }
+
+        // Show products in a category
+        function showCategoryProducts(category, id) {
+            currentState.category = { ...category, id };
+            
+            const container = document.getElementById('categoryProductsList');
+            const title = document.getElementById('categoryProductsTitle');
+            
+            container.innerHTML = '<div class="col-12 text-center py-5"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Carregando produtos...</p></div>';
+            title.textContent = `Produtos em ${category.name}`;
+            
+            db.collection('products').where('categoryId', '==', id).get()
+                .then(querySnapshot => {
+                    container.innerHTML = '';
+                    
+                    if (querySnapshot.empty) {
+                        container.innerHTML = '<div class="col-12 text-center py-5"><p>Nenhum produto encontrado nesta categoria.</p></div>';
+                        return;
+                    }
+                    
+                    let delay = 0;
+                    querySnapshot.forEach(doc => {
+                        const product = doc.data();
+                        const productCard = createProductCard(product, doc.id);
+                        productCard.style.animationDelay = `${delay}ms`;
+                        productCard.classList.add('fade-in');
+                        container.appendChild(productCard);
+                        delay += 100;
+                    });
+                })
+                .catch(error => {
+                    console.error("Error loading category products: ", error);
+                    container.innerHTML = '<div class="col-12 text-center py-5"><p>Ocorreu um erro ao carregar os produtos.</p></div>';
+                });
+            
+            showView('categoryProducts');
+        }
+
+        // Load user's ads
+        async function loadMyAds() {
+            if (!currentState.currentUser) {
+                console.error("Usuário não está logado");
+                showView('auth');
+                return;
+            }
+
+            const myAdsList = document.getElementById('myAdsList');
+            myAdsList.innerHTML = '<div class="col-12 text-center py-5"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Carregando seus anúncios...</p></div>';
+            
+            try {
+                // Primeiro tentamos buscar pelo email (não requer índice)
+                let querySnapshot = await db.collection('products')
+                    .where('userEmail', '==', currentState.currentUser.email)
+                    .get();
+
+                // Se não encontrou pelo email, tenta pelo userId (sem ordenação para evitar necessidade de índice)
+                if (querySnapshot.empty) {
+                    console.log("Nenhum anúncio encontrado pelo email, tentando pelo userId...");
+                    querySnapshot = await db.collection('products')
+                        .where('userId', '==', currentState.currentUser.uid)
+                        .get();
+                }
+
+                // Processa os resultados
+                myAdsList.innerHTML = '';
+                
+                if (querySnapshot.empty) {
+                    showNoAdsMessage();
+                    return;
+                }
+
+                // Ordena localmente por data (mais recente primeiro)
+                const ads = [];
+                querySnapshot.forEach(doc => {
+                    ads.push({
+                        id: doc.id,
+                        data: doc.data(),
+                        createdAt: doc.data().createdAt?.toDate() || new Date(0)
+                    });
+                });
+
+                // Ordena por data de criação (decrescente)
+                ads.sort((a, b) => b.createdAt - a.createdAt);
+
+                // Exibe os anúncios
+                displayAds(ads);
+
+            } catch (error) {
+                console.error("Erro ao carregar anúncios:", error);
+                myAdsList.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
+                        <h4>Erro ao carregar anúncios</h4>
+                        <div class="alert alert-danger">${error.message}</div>
+                        <button class="btn btn-primary" onclick="loadMyAds()">
+                            <i class="fas fa-sync-alt me-1"></i> Tentar Novamente
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        function showNoAdsMessage() {
+            const myAdsList = document.getElementById('myAdsList');
+            myAdsList.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                    <h4>Nenhum anúncio encontrado</h4>
+                    <p class="text-muted">Você ainda não criou nenhum anúncio.</p>
+                    <button class="btn btn-primary" id="createFirstAdBtn">
+                        <i class="fas fa-plus me-1"></i> Criar Primeiro Anúncio
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('createFirstAdBtn').addEventListener('click', () => {
+                showView('newAd');
+            });
+        }
+
+        function displayAds(ads) {
+            const myAdsList = document.getElementById('myAdsList');
+            let delay = 0;
+            
+            ads.forEach(ad => {
+                console.log("Exibindo anúncio:", ad.id, ad.data);
+                const adCard = createAdCard(ad.data, ad.id);
+                adCard.style.animationDelay = `${delay}ms`;
+                adCard.classList.add('fade-in');
+                myAdsList.appendChild(adCard);
+                delay += 100;
+            });
+        }
+
+        // Show edit modal with product data
+        function showEditModal(product, id) {
+            // Load categories for dropdown
+            loadCategoryDropdown('editProductCategory', product.categoryId);
+            
+            // Fill form with product data
+            document.getElementById('editAdId').value = id;
+            document.getElementById('editProductName').value = product.name;
+            document.getElementById('editProductCondition').value = product.condition;
+            document.getElementById('editProductPrice').value = product.price;
+            document.getElementById('editProductCurrentImage').value = product.image;
+            document.getElementById('editProductDescription').value = product.description;
+            
+            // Reset image upload
+            document.getElementById('editProductImageFile').value = '';
+            document.getElementById('editImagePreviewContainer').style.display = 'none';
+            currentState.editImageFile = null;
+            
+            const modal = new bootstrap.Modal(document.getElementById('editAdModal'));
+            modal.show();
+        }
+
+        // Handle login
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+            
+            const loginBtn = document.querySelector('#loginForm button[type="submit"]');
+            const originalButtonText = loginBtn.innerHTML;
+            
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Entrando...';
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    // Success - handled by authStateChanged
+                    showView('home');
+                })
+                .catch(error => {
+                    console.error("Login error:", error);
+                    alert('Erro ao fazer login: ' + error.message);
+                })
+                .finally(() => {
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = originalButtonText;
+                });
+        }
+
+        // Handle register
+        function handleRegister(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const phone = document.getElementById('registerPhone').value;
+            
+            if (!name || !email || !password || !phone) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert('A senha deve ter pelo menos 6 caracteres.');
+                return;
+            }
+            
+            const registerBtn = document.querySelector('#registerForm button[type="submit"]');
+            const originalButtonText = registerBtn.innerHTML;
+            
+            registerBtn.disabled = true;
+            registerBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Cadastrando...';
+            
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Save additional user data
+                    return db.collection('users').doc(userCredential.user.uid).set({
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                })
+                .then(() => {
+                    alert('Cadastro realizado com sucesso!');
+                    // Success - handled by authStateChanged
+                    showView('home');
+                })
+                .catch(error => {
+                    console.error("Registration error:", error);
+                    alert('Erro ao cadastrar: ' + error.message);
+                })
+                .finally(() => {
+                    registerBtn.disabled = false;
+                    registerBtn.innerHTML = originalButtonText;
+                });
+        }
+
+        // Handle logout
+        function handleLogout() {
+            auth.signOut()
+                .then(() => {
+                    currentState.currentUser = null;
+                    updateAuthUI(false);
+                    showView('auth');
+                })
+                .catch(error => {
+                    console.error("Logout error:", error);
+                    alert('Erro ao sair: ' + error.message);
+                });
+        }
+
+        // Upload image to Firebase Storage
+        async function uploadImage(file) {
+            try {
+                // Create storage path
+                const fileName = `products/${currentState.currentUser.uid}/${Date.now()}_${file.name}`;
+                const storageRef = storage.ref().child(fileName);
+                
+                // Upload file
+                const snapshot = await storageRef.put(file);
+                
+                // Get download URL
+                const downloadURL = await snapshot.ref.getDownloadURL();
+                return downloadURL;
+            } catch (error) {
+                console.error("Upload error:", error);
+                throw new Error("Falha no upload da imagem: " + error.message);
+            }
+        }
+
+        // Handle new ad submission
+        async function handleNewAdSubmit(e) {
+            e.preventDefault();
+            
+            if (!currentState.currentUser) {
+                alert('Você precisa estar logado para criar um anúncio!');
+                showView('auth');
+                return;
+            }
+
+            const form = e.target;
+            const submitButton = form.querySelector('button[type="submit"]');
+            const originalText = submitButton.innerHTML;
+
+            try {
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Publicando...';
+
+                // Basic validation
+                if (!form.productName.value || !form.productCategory.value || !form.productPrice.value || 
+                    !form.adState.value || !form.adCity.value) {
+                    throw new Error('Preencha todos os campos obrigatórios!');
+                }
+
+                // Upload image if selected
+                let imageUrl = 'https://via.placeholder.com/500?text=Sem+Imagem';
+                if (currentState.selectedImageFile) {
+                    imageUrl = await uploadImage(currentState.selectedImageFile);
+                }
+
+                // Create product data
+                const productData = {
+                    name: form.productName.value.trim(),
+                    categoryId: form.productCategory.value,
+                    categoryName: form.productCategory.options[form.productCategory.selectedIndex].text,
+                    condition: form.productCondition.value,
+                    price: parseFloat(form.productPrice.value),
+                    image: imageUrl,
+                    description: form.productDescription.value.trim(),
+                    sellerName: form.sellerName.value.trim(),
+                    sellerContact: form.sellerContact.value.replace(/\D/g, ''), // Remove non-numeric characters
+                    userId: currentState.currentUser.uid,
+                    userEmail: currentState.currentUser.email,
+                    locationText: `${form.adCity.value}, ${form.adState.options[form.adState.selectedIndex].text}`,
+                    location: currentState.adLocation ? 
+                        new firebase.firestore.GeoPoint(
+                            currentState.adLocation.latitude, 
+                            currentState.adLocation.longitude
+                        ) : null,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                // Save to Firestore
+                await db.collection('products').add(productData);
+                
+                // Feedback and reset
+                alert('Anúncio publicado com sucesso!');
+                form.reset();
+                document.getElementById('imagePreviewContainer').style.display = 'none';
+                currentState.selectedImageFile = null;
+                currentState.adLocation = null;
+                document.getElementById('locationCoordinates').style.display = 'none';
+                document.getElementById('useExactLocation').checked = false;
+                document.getElementById('exactLocationFields').style.display = 'none';
+                
+                // Update ads list
+                showView('myAds');
+                loadMyAds();
+
+            } catch (error) {
+                console.error("Error publishing ad:", error);
+                alert(`Erro: ${error.message}`);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalText;
+            }
+        }
+
+        // Show add category modal
+        function showAddCategoryModal() {
+            const modal = new bootstrap.Modal(document.getElementById('addCategoryModal'));
+            document.getElementById('newCategoryName').value = '';
+            modal.show();
+        }
+
+        // Handle add category
+        function handleAddCategory() {
+            const name = document.getElementById('newCategoryName').value.trim();
+            
+            if (!name) {
+                alert('Por favor, insira um nome para a categoria.');
+                return;
+            }
+            
+            const saveButton = document.getElementById('saveCategoryBtn');
+            const originalButtonText = saveButton.innerHTML;
+            
+            saveButton.disabled = true;
+            saveButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Salvando...';
+            
+            db.collection('categories').add({
+                name: name,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addCategoryModal'));
+                modal.hide();
+                loadCategories();
+                loadAllCategories();
+                loadCategoryDropdown('productCategory');
+            })
+            .catch(error => {
+                console.error("Error adding category: ", error);
+                alert('Ocorreu um erro ao adicionar a categoria. Por favor, tente novamente.');
+            })
+            .finally(() => {
+                saveButton.disabled = false;
+                saveButton.innerHTML = originalButtonText;
+            });
+        }
+
+        // Show make offer modal
+        function showMakeOfferModal() {
+            const modal = new bootstrap.Modal(document.getElementById('makeOfferModal'));
+            document.getElementById('offerAmount').value = '';
+            document.getElementById('offerMessage').value = '';
+            document.getElementById('offerContact').value = '';
+            modal.show();
+        }
+
+        // Handle make offer
+        function handleMakeOffer() {
+            const amount = parseFloat(document.getElementById('offerAmount').value);
+            const message = document.getElementById('offerMessage').value;
+            const contact = document.getElementById('offerContact').value;
+            
+            if (!amount || isNaN(amount)) {
+                alert('Por favor, insira um valor válido para a oferta.');
+                return;
+            }
+            
+            if (!contact) {
+                alert('Por favor, insira seu WhatsApp para contato.');
+                return;
+            }
+            
+            const sendButton = document.getElementById('sendOfferBtn');
+            const originalButtonText = sendButton.innerHTML;
+            
+            sendButton.disabled = true;
+            sendButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Enviando...';
+            
+            const offerData = {
+                productId: currentState.product.id,
+                productName: currentState.product.name,
+                sellerContact: currentState.product.sellerContact,
+                amount: amount,
+                message: message,
+                buyerContact: contact,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            db.collection('offers').add(offerData)
+                .then(() => {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('makeOfferModal'));
+                    modal.hide();
+                    
+                    // Send WhatsApp message to seller
+                    const whatsappUrl = `https://wa.me/55${currentState.product.sellerContact}?text=${encodeURIComponent(
+                        `Olá ${currentState.product.sellerName}, tenho interesse no seu anúncio "${currentState.product.name}"!\n\n` +
+                        `Estou oferecendo R$ ${amount.toFixed(2).replace('.', ',')} (valor original: R$ ${currentState.product.price.toFixed(2).replace('.', ',')}).\n\n` +
+                        `${message ? `Minha mensagem: ${message}\n\n` : ''}` +
+                        `Meu WhatsApp: https://wa.me/55${contact}`
+                    )}`;
+                    
+                    window.open(whatsappUrl, '_blank');
+                })
+                .catch(error => {
+                    console.error("Error sending offer: ", error);
+                    alert('Ocorreu um erro ao enviar a oferta. Por favor, tente novamente.');
+                })
+                .finally(() => {
+                    sendButton.disabled = false;
+                    sendButton.innerHTML = originalButtonText;
+                });
+        }
+
+        // Handle save ad changes
+        async function handleSaveAdChanges() {
+            const form = document.getElementById('editAdForm');
+            const adId = form.editAdId.value;
+            const saveButton = document.getElementById('saveAdChangesBtn');
+            const originalButtonText = saveButton.innerHTML;
+            
+            saveButton.disabled = true;
+            saveButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Salvando...';
+            
+            try {
+                // Upload new image if selected
+                let imageUrl = document.getElementById('editProductCurrentImage').value;
+                if (currentState.editImageFile) {
+                    imageUrl = await uploadImage(currentState.editImageFile);
+                }
+
+                const productData = {
+                    name: form.editProductName.value,
+                    categoryId: form.editProductCategory.value,
+                    categoryName: form.editProductCategory.options[form.editProductCategory.selectedIndex].text,
+                    condition: form.editProductCondition.value,
+                    price: parseFloat(form.editProductPrice.value),
+                    image: imageUrl,
+                    description: form.editProductDescription.value,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                await db.collection('products').doc(adId).update(productData);
+                
+                alert('Anúncio atualizado com sucesso!');
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editAdModal'));
+                modal.hide();
+                loadMyAds();
+            } catch (error) {
+                console.error("Error updating product:", error);
+                alert('Erro ao atualizar anúncio: ' + error.message);
+            } finally {
+                saveButton.disabled = false;
+                saveButton.innerHTML = originalButtonText;
+            }
+        }
+
+        // Handle delete ad
+        function handleDeleteAd() {
+            const adId = document.getElementById('editAdId').value;
+            const deleteButton = document.getElementById('deleteAdBtn');
+            const originalButtonText = deleteButton.innerHTML;
+            
+            if (!confirm('Tem certeza que deseja excluir este anúncio permanentemente?')) {
+                return;
+            }
+            
+            deleteButton.disabled = true;
+            deleteButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Excluindo...';
+            
+            db.collection('products').doc(adId).delete()
+                .then(() => {
+                    alert('Anúncio excluído com sucesso!');
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editAdModal'));
+                    modal.hide();
+                    loadMyAds();
+                })
+                .catch(error => {
+                    console.error("Error deleting product:", error);
+                    alert('Erro ao excluir anúncio: ' + error.message);
+                })
+                .finally(() => {
+                    deleteButton.disabled = false;
+                    deleteButton.innerHTML = originalButtonText;
+                });
+        }
+
+        // Delete ad directly (from my ads list)
+        function deleteAd(adId) {
+            if (!confirm('Tem certeza que deseja excluir este anúncio permanentemente?')) {
+                return;
+            }
+            
+            db.collection('products').doc(adId).delete()
+                .then(() => {
+                    alert('Anúncio excluído com sucesso!');
+                    loadMyAds();
+                })
+                .catch(error => {
+                    console.error("Error deleting product:", error);
+                    alert('Erro ao excluir anúncio: ' + error.message);
+                });
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
