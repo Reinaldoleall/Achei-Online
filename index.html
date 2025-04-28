@@ -884,6 +884,7 @@
     <!-- Bootstrap and other libraries -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+    
     <script type="module">
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -908,6 +909,7 @@
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
 </script>
+    
     <script>
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
@@ -1120,36 +1122,41 @@
         // Set up file upload listeners
         function setupFileUploadListeners() {
             // Listener for new ad image upload
-            document.getElementById('productImageFile').addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    // Validations
-                    if (!file.type.match(/image\/(jpeg|png|jpg)/)) {
-                        alert('Apenas formatos JPEG e PNG são permitidos!');
-                        e.target.value = '';
-                        return;
-                    }
-                    
-                    if (file.size > 5 * 1024 * 1024) {
-                        alert('O tamanho máximo permitido é 5MB!');
-                        e.target.value = '';
-                        return;
-                    }
-                    
-                    currentState.selectedImageFile = file;
-                    
-                    // Preview
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        document.getElementById('imagePreview').src = e.target.result;
-                        document.getElementById('imagePreviewContainer').style.display = 'block';
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    currentState.selectedImageFile = null;
-                    document.getElementById('imagePreviewContainer').style.display = 'none';
-                }
-            });
+document.getElementById('productImageFile').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        try {
+            // Verifica o tipo
+            if (!file.type.match(/image\/(jpeg|png|jpg|gif)/)) {
+                throw new Error('Apenas imagens nos formatos JPEG, PNG ou GIF são permitidas!');
+            }
+            
+            // Verifica o tamanho
+            if (file.size > 5 * 1024 * 1024) {
+                throw new Error('O tamanho máximo permitido é 5MB!');
+            }
+            
+            currentState.selectedImageFile = file;
+            
+            // Preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('imagePreview').src = e.target.result;
+                document.getElementById('imagePreviewContainer').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+            
+        } catch (error) {
+            alert(error.message);
+            e.target.value = '';
+            currentState.selectedImageFile = null;
+            document.getElementById('imagePreviewContainer').style.display = 'none';
+        }
+    } else {
+        currentState.selectedImageFile = null;
+        document.getElementById('imagePreviewContainer').style.display = 'none';
+    }
+});
             
             // Listener for edit ad image upload
             document.getElementById('editProductImageFile').addEventListener('change', function(e) {
@@ -2270,103 +2277,287 @@
                 });
         }
 
-        // Upload image to Firebase Storage
-        async function uploadImage(file) {
-            try {
-                // Create storage path
-                const fileName = `products/${currentState.currentUser.uid}/${Date.now()}_${file.name}`;
-                const storageRef = storage.ref().child(fileName);
-                
-                // Upload file
-                const snapshot = await storageRef.put(file);
-                
-                // Get download URL
-                const downloadURL = await snapshot.ref.getDownloadURL();
-                return downloadURL;
-            } catch (error) {
-                console.error("Upload error:", error);
-                throw new Error("Falha no upload da imagem: " + error.message);
+// Upload image to Firebase Storage with resizing and better error handling
+async function uploadImage(file) {
+    try {
+        // Verifica se o arquivo existe
+        if (!file) {
+            throw new Error('Nenhum arquivo selecionado');
+        }
+
+        // Verifica o tipo do arquivo
+        const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+        if (!validTypes.includes(file.type)) {
+            throw new Error('Tipo de arquivo inválido. Use apenas JPEG, PNG ou GIF.');
+        }
+
+        // Cria um canvas para redimensionamento
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+            throw new Error('Não foi possível criar o contexto para redimensionamento');
+        }
+
+        // Carrega a imagem com tratamento de erro
+        let img;
+        try {
+            img = await new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = () => reject(new Error('Falha ao carregar a imagem'));
+                img.src = URL.createObjectURL(file);
+            });
+        } catch (error) {
+            throw new Error('Erro ao processar a imagem: ' + error.message);
+        }
+
+        // Define as dimensões máximas
+        const MAX_WIDTH = 400;
+        const MAX_HEIGHT = 400;
+        let width = img.width;
+        let height = img.height;
+
+        // Redimensiona se necessário
+        if (width > height) {
+            if (width > MAX_WIDTH) {
+                height *= MAX_WIDTH / width;
+                width = MAX_WIDTH;
+            }
+        } else {
+            if (height > MAX_HEIGHT) {
+                width *= MAX_HEIGHT / height;
+                height = MAX_HEIGHT;
             }
         }
+
+        // Configura o canvas com as novas dimensões
+        canvas.width = width;
+        canvas.height = height;
+
+        // Desenha a imagem redimensionada
+        try {
+            ctx.drawImage(img, 0, 0, width, height);
+        } catch (error) {
+            throw new Error('Erro ao redimensionar a imagem');
+        }
+
+        // Converte para blob com qualidade reduzida
+        let blob;
+        try {
+            blob = await new Promise((resolve, reject) => {
+                canvas.toBlob(blob => {
+                    if (!blob) {
+                        reject(new Error('Falha ao converter imagem'));
+                    } else {
+                        resolve(blob);
+                    }
+                }, 'image/jpeg', 0.7); // 0.7 = 70% de qualidade
+            });
+        } catch (error) {
+            throw new Error('Erro ao comprimir a imagem: ' + error.message);
+        }
+
+        // Verifica o tamanho do blob redimensionado
+        if (blob.size > 5 * 1024 * 1024) {
+            throw new Error('A imagem redimensionada ainda é muito grande (' + 
+                Math.round(blob.size / 1024) + 'KB). Tente uma imagem com menos detalhes.');
+        }
+
+        // Cria um nome único para o arquivo
+        const fileExtension = 'jpg';
+        const fileName = `products/${currentState.currentUser.uid}/${Date.now()}.${fileExtension}`;
+        
+        // Faz referência ao Storage
+        const storageRef = firebase.storage().ref(fileName);
+        
+        console.log(`Iniciando upload de imagem redimensionada (${(blob.size/1024).toFixed(2)}KB)`);
+        
+        // Faz o upload do blob redimensionado com tratamento de erro
+        let uploadTask;
+        try {
+            uploadTask = storageRef.put(blob);
+            await uploadTask;
+        } catch (error) {
+            throw new Error('Falha no upload: ' + error.message);
+        }
+        
+        // Obtém a URL de download
+        let downloadURL;
+        try {
+            downloadURL = await storageRef.getDownloadURL();
+        } catch (error) {
+            throw new Error('Falha ao obter URL da imagem: ' + error.message);
+        }
+        
+        console.log('Upload da imagem redimensionada concluído com sucesso:', downloadURL);
+        return downloadURL;
+        
+    } catch (error) {
+        console.error('Erro durante o upload:', error);
+        // Melhora a mensagem de erro para o usuário
+        const userMessage = error.message || 'Erro desconhecido ao processar a imagem';
+        throw new Error(userMessage);
+    }
+}
 
         // Handle new ad submission
-        async function handleNewAdSubmit(e) {
-            e.preventDefault();
-            
-            if (!currentState.currentUser) {
-                alert('Você precisa estar logado para criar um anúncio!');
-                showView('auth');
-                return;
-            }
+async function handleNewAdSubmit(e) {
+    e.preventDefault();
+    
+    console.log('Iniciando envio do anúncio...');
+    
+    if (!currentState.currentUser) {
+        alert('Você precisa estar logado para criar um anúncio!');
+        showView('auth');
+        return;
+    }
 
-            const form = e.target;
-            const submitButton = form.querySelector('button[type="submit"]');
-            const originalText = submitButton.innerHTML;
+    const form = e.target;
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalText = submitButton.innerHTML;
 
+    try {
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Publicando...';
+
+        // Validação completa do formulário
+        console.log('Validando formulário...');
+        const requiredFields = [
+            { field: form.productName, name: 'Nome do Produto' },
+            { field: form.productCategory, name: 'Categoria' },
+            { field: form.productPrice, name: 'Preço' },
+            { field: form.adState, name: 'Estado' },
+            { field: form.adCity, name: 'Cidade' },
+            { field: form.sellerName, name: 'Seu Nome' },
+            { field: form.sellerContact, name: 'Contato WhatsApp' }
+        ];
+
+        const missingFields = requiredFields.filter(f => !f.field.value.trim());
+        if (missingFields.length > 0) {
+            throw new Error(`Preencha todos os campos obrigatórios: ${missingFields.map(f => f.name).join(', ')}`);
+        }
+
+        // Validação do preço
+        const price = parseFloat(form.productPrice.value);
+        if (isNaN(price) || price <= 0) {
+            throw new Error('O preço deve ser um valor numérico maior que zero');
+        }
+
+        // Validação do contato WhatsApp
+        const contact = form.sellerContact.value.replace(/\D/g, '');
+        if (contact.length < 10 || contact.length > 11) {
+            throw new Error('O número do WhatsApp deve ter 10 ou 11 dígitos (DDD + número)');
+        }
+
+        // Upload da imagem com redimensionamento
+        let imageUrl = 'https://via.placeholder.com/500?text=Sem+Imagem';
+        if (currentState.selectedImageFile) {
+            console.log('Iniciando upload e redimensionamento da imagem...');
             try {
-                submitButton.disabled = true;
-                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Publicando...';
-
-                // Basic validation
-                if (!form.productName.value || !form.productCategory.value || !form.productPrice.value || 
-                    !form.adState.value || !form.adCity.value) {
-                    throw new Error('Preencha todos os campos obrigatórios!');
-                }
-
-                // Upload image if selected
-                let imageUrl = 'https://via.placeholder.com/500?text=Sem+Imagem';
-                if (currentState.selectedImageFile) {
-                    imageUrl = await uploadImage(currentState.selectedImageFile);
-                }
-
-                // Create product data
-                const productData = {
-                    name: form.productName.value.trim(),
-                    categoryId: form.productCategory.value,
-                    categoryName: form.productCategory.options[form.productCategory.selectedIndex].text,
-                    condition: form.productCondition.value,
-                    price: parseFloat(form.productPrice.value),
-                    image: imageUrl,
-                    description: form.productDescription.value.trim(),
-                    sellerName: form.sellerName.value.trim(),
-                    sellerContact: form.sellerContact.value.replace(/\D/g, ''), // Remove non-numeric characters
-                    userId: currentState.currentUser.uid,
-                    userEmail: currentState.currentUser.email,
-                    locationText: `${form.adCity.value}, ${form.adState.options[form.adState.selectedIndex].text}`,
-                    location: currentState.adLocation ? 
-                        new firebase.firestore.GeoPoint(
-                            currentState.adLocation.latitude, 
-                            currentState.adLocation.longitude
-                        ) : null,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                };
-
-                // Save to Firestore
-                await db.collection('products').add(productData);
-                
-                // Feedback and reset
-                alert('Anúncio publicado com sucesso!');
-                form.reset();
-                document.getElementById('imagePreviewContainer').style.display = 'none';
-                currentState.selectedImageFile = null;
-                currentState.adLocation = null;
-                document.getElementById('locationCoordinates').style.display = 'none';
-                document.getElementById('useExactLocation').checked = false;
-                document.getElementById('exactLocationFields').style.display = 'none';
-                
-                // Update ads list
-                showView('myAds');
-                loadMyAds();
-
-            } catch (error) {
-                console.error("Error publishing ad:", error);
-                alert(`Erro: ${error.message}`);
-            } finally {
-                submitButton.disabled = false;
-                submitButton.innerHTML = originalText;
+                imageUrl = await uploadImage(currentState.selectedImageFile)
+                    .catch(error => {
+                        console.error('Erro detalhado no upload:', error);
+                        throw new Error('Falha ao processar a imagem: ' + error.message);
+                    });
+                console.log('Upload da imagem concluído:', imageUrl);
+            } catch (uploadError) {
+                console.error('Falha no upload da imagem:', uploadError);
+                throw new Error(uploadError.message || 'Erro ao enviar a imagem');
             }
         }
+
+        // Preparar dados de localização
+        const locationText = `${form.adCity.value}, ${form.adState.options[form.adState.selectedIndex].text}`;
+        let geoPoint = null;
+        
+        if (currentState.adLocation) {
+            try {
+                geoPoint = new firebase.firestore.GeoPoint(
+                    currentState.adLocation.latitude,
+                    currentState.adLocation.longitude
+                );
+            } catch (error) {
+                console.error('Erro ao criar GeoPoint:', error);
+                // Continua sem geoPoint mas com locationText
+            }
+        }
+
+        // Criar dados do produto
+        console.log('Preparando dados do anúncio...');
+        const productData = {
+            name: form.productName.value.trim(),
+            categoryId: form.productCategory.value,
+            categoryName: form.productCategory.options[form.productCategory.selectedIndex].text,
+            condition: form.productCondition.value,
+            price: price,
+            image: imageUrl,
+            description: form.productDescription.value.trim(),
+            sellerName: form.sellerName.value.trim(),
+            sellerContact: contact,
+            userId: currentState.currentUser.uid,
+            userEmail: currentState.currentUser.email,
+            locationText: locationText,
+            location: geoPoint,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            status: 'active' // Adiciona status para possível moderação
+        };
+
+        console.log('Enviando dados para o Firestore...', productData);
+        
+        // Salvar no Firestore com tratamento de erro
+        try {
+            await db.collection('products').add(productData);
+            console.log('Anúncio publicado com sucesso!');
+            
+            // Feedback visual melhorado
+            submitButton.innerHTML = '<i class="fas fa-check me-2"></i> Publicado!';
+            setTimeout(() => {
+                submitButton.innerHTML = originalText;
+            }, 2000);
+            
+            alert('Anúncio publicado com sucesso!');
+            
+            // Resetar formulário de forma mais segura
+            form.reset();
+            document.getElementById('imagePreviewContainer').style.display = 'none';
+            currentState.selectedImageFile = null;
+            currentState.adLocation = null;
+            document.getElementById('locationCoordinates').style.display = 'none';
+            document.getElementById('useExactLocation').checked = false;
+            document.getElementById('exactLocationFields').style.display = 'none';
+            
+            // Atualizar lista de anúncios
+            showView('myAds');
+            loadMyAds();
+            
+        } catch (firestoreError) {
+            console.error("Erro no Firestore:", firestoreError);
+            throw new Error('Erro ao salvar no banco de dados. Tente novamente.');
+        }
+
+    } catch (error) {
+        console.error("Erro ao publicar anúncio:", error);
+        
+        // Mensagem de erro mais amigável
+        let errorMessage = error.message;
+        if (error.message.includes('storage/')) {
+            errorMessage = 'Erro no armazenamento da imagem: ' + 
+                error.message.split('storage/')[1].replace(/-/g, ' ');
+        }
+        
+        alert(`Erro: ${errorMessage}`);
+        
+        // Restaura o botão com ícone de erro temporário
+        submitButton.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i> Erro!';
+        setTimeout(() => {
+            submitButton.innerHTML = originalText;
+        }, 2000);
+        
+    } finally {
+        submitButton.disabled = false;
+    }
+}
 
         // Show add category modal
         function showAddCategoryModal() {
